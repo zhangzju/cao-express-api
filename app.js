@@ -19,6 +19,8 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
+app.engine('html', require('ejs').renderFile);
+//app.set('view engine', 'ejs');
 app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
@@ -26,11 +28,15 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(multer());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/login', routes);
+app.use('/register', routes);
+app.use('/home', routes);
 app.use('/fellow', fellow);
 
 // catch 404 and forward to error handler

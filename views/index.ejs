@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
   </head>
-  <body class="container">
-      <div class="item">
-          <h1><%= title %></h1>
-          <p>The backend api provider of RESTful.</p>
-      </div>
+  <body>
+    <header>
+      <h1><%= title %></h1>
+    </header>
+    <p>
+      <a href="/login">login</a>
+      <a href="/register">Register</a>
+    </p>
   </body>
 </html>

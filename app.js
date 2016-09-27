@@ -6,16 +6,18 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var multer = require('multer');
+var upload = multer({ dest: './uploads' });
 var session = require('express-session');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var fellow = require('./routes/fellow');
 
-global.dbHandle = require('.db/dbHandle');
+global.dbHandle = require('./db/dbHandle');
 global.db = mongoose.connect("mongodb://localhost:27017/nodedb");
 
 var app = express();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,9 +30,26 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+  secret: 'secret',
+  cookie:{
+    maxAge: 1000*60*30
+  }
+}));
+
+app.use(function (req, res, next){
+  res.locals.user = req.session.user;
+  var err = req.session.error;
+  delete req.session.error;
+  res.locals.message = '';
+  if (err) {
+    res.locals.message = '<div class = "alert alert-danger" style="margin-bottom: 20px ;color:red;">'+err+'</div>';
+  }
+  next();
+});
 
 app.use('/', routes);
 app.use('/users', users);
